@@ -1,7 +1,7 @@
 import GUI from 'lil-gui';
 
 export function setupUI(material) {
-    const gui = new GUI({ title: 'WebGL Fresnel Effect Settings', width: 200 });
+    const gui = new GUI({ title: 'WebGL Fresnel Effect Settings', width: 300 });
 
 
     const state = {
