@@ -1,6 +1,6 @@
 import GUI from 'lil-gui';
 
-export function setupUI(material) {
+export function setupUI(material, bloomPass) {
     const gui = new GUI({ title: 'WebGL Fresnel Effect Settings', width: 300 });
 
 
@@ -27,7 +27,7 @@ export function setupUI(material) {
 
     fresnelFolder.add(state, 'fresnelEnabled').name('Enable/Disable Effect').onChange(v => material.setFresnelEnabled(v));
 
-   
+
     fresnelFolder.addColor(state, 'edgeColor').name('Edge Color').onChange(v => material.setFresnelColor(v));
 
     fresnelFolder.add(state, 'fresnelStrength', 0.0, 1.0, 0.01).name(' Fresnel Strength')
@@ -38,6 +38,8 @@ export function setupUI(material) {
 
     fresnelFolder.add(state, 'steepness', 1.0, 30.0, 0.1).name('Steepness')
         .onChange(v => material.setSteepness(v));
+
+
 
     pbrFolder.open();
     fresnelFolder.open();

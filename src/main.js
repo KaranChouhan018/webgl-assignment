@@ -1,7 +1,12 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { FresnelMaterial } from './FresnelMaterial.js';
+import { ParticleSystem } from './particle.js';
 import { setupUI } from './ui.js';
 import Stats from 'stats.js';
 
@@ -9,6 +14,8 @@ let scene, camera, renderer, controls;
 let sphere;
 let material;
 let stats;
+let composer, renderPass, bloomPass;
+let particleSystem;
 
 function init() {
 
@@ -58,11 +65,36 @@ function init() {
     sphere = new THREE.Mesh(geometry, material);
     scene.add(sphere);
 
+    particleSystem = new ParticleSystem(1000);
+    scene.add(particleSystem.points);
+
+    // Post-processing setup
+    composer = new EffectComposer(renderer);
+    renderPass = new RenderPass(scene, camera);
+    composer.addPass(renderPass);
+
+    bloomPass = new UnrealBloomPass(
+        new THREE.Vector2(window.innerWidth, window.innerHeight),
+        1.5,
+        0.4,
+        0.85
+    );
+
+    bloomPass.threshold = 0.1;
+    bloomPass.strength = 1.2;
+    bloomPass.radius = 0.5;
+    // composer.addPass(bloomPass);
+
+
+
+    const outputPass = new OutputPass();
+    composer.addPass(outputPass);
+
     const loadingScreen = document.querySelector('.loading-overlay');
     const loadingBar = document.querySelector('.loading-bar');
 
     if (loadingScreen && loadingBar) {
-        // Wait for the CSS loading bar animation to finish before fading out
+
         loadingBar.addEventListener('animationend', () => {
             loadingScreen.style.opacity = '0';
             setTimeout(() => loadingScreen.remove(), 500);
@@ -76,7 +108,7 @@ function init() {
     window.addEventListener('resize', onWindowResize);
 
 
-    setupUI(material);
+    setupUI(material, bloomPass);
 
 
     renderer.setAnimationLoop(animate);
@@ -87,7 +119,7 @@ function onWindowResize() {
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
+    composer.setSize(window.innerWidth, window.innerHeight);
 
     camera.position.z = window.innerWidth < 768 ? 12 : 8;
 }
@@ -97,9 +129,10 @@ function animate(time) {
 
     controls.update();
 
+    const elapsedTime = time * 0.001;
+    particleSystem.update(elapsedTime);
 
-
-    renderer.render(scene, camera);
+    composer.render();
 
     stats.end();
 }
