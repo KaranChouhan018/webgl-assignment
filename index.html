@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGL Fresnel Effect</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #050505;
+            font-family: 'Inter', sans-serif;
+        }
+        canvas {
+            display: block;
+        }
+        .loading-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #050505;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            transition: opacity 0.5s ease-out;
+        }
+        .loading-bar-container {
+            width: 200px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .loading-bar {
+            width: 0%;
+            height: 100%;
+            background: #fff;
+            transition: width 0.1s ease;
+            animation: fake-load 2s ease-in-out forwards;
+        }
+        @keyframes fake-load {
+            0% { width: 0%; }
+            50% { width: 70%; }
+            100% { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-overlay">
+        <div class="loading-bar-container">
+            <div class="loading-bar"></div>
+        </div>
+    </div>
+    
+
+    <script async src="https://unpkg.com/es-module-shims@1.8.0/dist/es-module-shims.js"></script>
+
+  
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/",
+                "lil-gui": "https://unpkg.com/lil-gui@0.19.1/dist/lil-gui.esm.min.js",
+                "stats.js": "https://unpkg.com/three@0.160.0/examples/jsm/libs/stats.module.js"
+            }
+        }
+    </script>
+
+
+    <script type="module" src="./src/main.js"></script>
+</body>
+</html>
