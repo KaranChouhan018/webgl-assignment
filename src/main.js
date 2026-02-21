@@ -45,7 +45,7 @@ function init() {
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
     controls.autoRotate = true;
-    controls.autoRotateSpeed = 0.5;
+    controls.autoRotateSpeed = 0.9;
 
 
     material = new FresnelMaterial({
@@ -88,7 +88,7 @@ function onWindowResize() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    // Adjust camera distance for smaller screens to prevent cropping
+
     camera.position.z = window.innerWidth < 768 ? 12 : 8;
 }
 
@@ -97,9 +97,7 @@ function animate(time) {
 
     controls.update();
 
-    const timeInSeconds = time * 1;
-    sphere.rotation.y = timeInSeconds * 0.1;
-    sphere.rotation.x = timeInSeconds * 0.5;
+
 
     renderer.render(scene, camera);
 

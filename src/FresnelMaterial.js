@@ -4,7 +4,6 @@ export class FresnelMaterial extends THREE.MeshStandardMaterial {
     constructor(parameters) {
         super(parameters);
 
-        // Store our custom parameters
         this.userData.fresnelParameters = {
             fresnelColor: new THREE.Color(0x00d9ff),
             fresnelStrength: 2.0,
@@ -14,7 +13,7 @@ export class FresnelMaterial extends THREE.MeshStandardMaterial {
         };
 
         this.onBeforeCompile = (shader) => {
-            // Register custom uniforms
+    
             shader.uniforms.uFresnelColor = { value: this.userData.fresnelParameters.fresnelColor };
             shader.uniforms.uFresnelStrength = { value: this.userData.fresnelParameters.fresnelStrength };
             shader.uniforms.uEdgeAttenuation = { value: this.userData.fresnelParameters.edgeAttenuation };
