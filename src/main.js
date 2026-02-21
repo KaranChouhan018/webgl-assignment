@@ -17,7 +17,7 @@ function init() {
 
 
     camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-    camera.position.set(0, 0, 8);
+    camera.position.set(0, 0, window.innerWidth < 768 ? 12 : 8);
 
 
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
@@ -87,6 +87,9 @@ function onWindowResize() {
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    // Adjust camera distance for smaller screens to prevent cropping
+    camera.position.z = window.innerWidth < 768 ? 12 : 8;
 }
 
 function animate(time) {
