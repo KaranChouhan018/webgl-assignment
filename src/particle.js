@@ -6,14 +6,13 @@ export class ParticleSystem {
         this.geometry = new THREE.BufferGeometry();
         this.particles = new Float32Array(count * 3);
 
-        // Load the texture
         const textureLoader = new THREE.TextureLoader();
 
         const particleTexture = textureLoader.load('./particles/particle_alpha_map_256x256.png');
 
         for (let i = 0; i < count; i++) {
 
-            const r = 2.5 + Math.random() * 8; 
+            const r = 2.5 + Math.random() * 8;
             const theta = Math.random() * Math.PI * 2;
             const phi = Math.acos((Math.random() * 2) - 1);
 
@@ -29,14 +28,14 @@ export class ParticleSystem {
         this.geometry.setAttribute('position', new THREE.BufferAttribute(this.particles, 3));
 
         this.material = new THREE.PointsMaterial({
-            size: 0.2, 
+            size: 0.2,
             sizeAttenuation: true,
             map: particleTexture,
             transparent: true,
-            depthWrite: false, 
+            depthWrite: false,
             blending: THREE.AdditiveBlending,
-            color: 0xc482ff, 
-            opacity: 1.0 
+            color: 0xc482ff,
+            opacity: 1.0
         });
 
         this.points = new THREE.Points(this.geometry, this.material);
@@ -46,5 +45,7 @@ export class ParticleSystem {
         // Slowly rotate the entire particle system
         this.points.rotation.y = time * 0.05;
         this.points.rotation.x = time * 0.025;
+        this.material.size = 0.2 + Math.sin(time * 2) * 0.05;
+        this.material.opacity = 0.8 + Math.sin(time * 3) * 0.2;
     }
 }
